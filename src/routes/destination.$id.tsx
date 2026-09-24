@@ -9,7 +9,7 @@ import {
   Route as RouteIcon,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
-import { NepalMap } from "@/components/NepalMap";
+import { GoogleTrekMap } from "@/components/GoogleTrekMap";
 import { getDestination } from "@/data/destinations";
 import { ROUTE_PATHS } from "@/data/routes-geo";
 
@@ -40,7 +40,6 @@ function DestinationPage() {
     <div className="min-h-screen bg-[#0c1a14]">
       <Navbar />
 
-      {/* Compact header */}
       <div className="border-b border-white/10 bg-[#0a1610] pt-16">
         <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
           <Link
@@ -80,22 +79,23 @@ function DestinationPage() {
         </div>
       </div>
 
-      {/* REAL MAP — primary focus when trek is opened */}
+      {/* Google Maps — trek-specific route */}
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
         <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-white">
           <RouteIcon className="h-5 w-5 text-emerald-400" />
-          Trek route on map
+          Trek route — Google Maps
         </h2>
-        <NepalMap routeId={hasMap ? id : null} height={520} autoFocus />
-        {!hasMap && (
-          <p className="mt-3 text-center text-sm text-white/50">
-            Detailed path for this destination will be added soon. See itinerary below.
-          </p>
+        {hasMap ? (
+          <GoogleTrekMap routeId={id} height={480} />
+        ) : (
+          <div className="flex h-[320px] items-center justify-center rounded-2xl border border-white/10 bg-[#0a1610] text-sm text-white/50">
+            Google Maps route for this destination coming soon
+          </div>
         )}
       </div>
 
       <div className="mx-auto max-w-4xl px-4 pb-14 sm:px-6 lg:px-8">
-        <section className="mt-4">
+        <section className="mt-2">
           <h2 className="text-xl font-semibold text-white">Overview</h2>
           <p className="mt-3 leading-relaxed text-white/70">
             {d.description || d.short}

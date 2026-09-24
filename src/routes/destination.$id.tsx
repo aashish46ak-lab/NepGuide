@@ -9,7 +9,9 @@ import {
   Route as RouteIcon,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { NepalMap } from "@/components/NepalMap";
 import { getDestination } from "@/data/destinations";
+import { ROUTE_COORDS } from "@/data/routes-geo";
 
 export const Route = createFileRoute("/destination/$id")({
   component: DestinationPage,
@@ -18,6 +20,7 @@ export const Route = createFileRoute("/destination/$id")({
 function DestinationPage() {
   const { id } = Route.useParams();
   const d = getDestination(id);
+  const hasMap = Boolean(ROUTE_COORDS[id]);
 
   if (!d) {
     return (
@@ -37,19 +40,14 @@ function DestinationPage() {
     <div className="min-h-screen bg-[#0c1a14]">
       <Navbar />
 
-      {/* Hero */}
-      <div className="relative h-[42vh] min-h-[280px] w-full">
-        <img
-          src={d.image}
-          alt={d.name}
-          className="h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0c1a14] via-[#0c1a14]/50 to-black/30" />
+      <div className="relative h-[40vh] min-h-[260px] w-full">
+        <img src={d.image} alt={d.name} className="h-full w-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0c1a14] via-[#0c1a14]/55 to-black/25" />
         <div className="absolute bottom-0 left-0 right-0 px-4 pb-8 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-4xl">
             <Link
               to="/"
-              className="mb-4 inline-flex items-center gap-2 text-sm text-white/70 transition hover:text-white"
+              className="mb-3 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
             >
               <ArrowLeft className="h-4 w-4" />
               Back
@@ -66,7 +64,6 @@ function DestinationPage() {
       </div>
 
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        {/* Quick stats */}
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           {[
             { icon: Clock, label: "Duration", value: d.duration },
@@ -87,7 +84,13 @@ function DestinationPage() {
           ))}
         </div>
 
-        {/* Overview */}
+        {hasMap && (
+          <section className="mt-10">
+            <h2 className="mb-4 text-xl font-semibold text-white">Route on map</h2>
+            <NepalMap routeId={id} height={360} />
+          </section>
+        )}
+
         <section className="mt-10">
           <h2 className="text-xl font-semibold text-white">Overview</h2>
           <p className="mt-3 leading-relaxed text-white/70">
@@ -122,7 +125,6 @@ function DestinationPage() {
           </div>
         </section>
 
-        {/* Day-by-day route */}
         {d.stops && d.stops.length > 0 && (
           <section className="mt-12">
             <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
@@ -150,7 +152,6 @@ function DestinationPage() {
           </section>
         )}
 
-        {/* Budget */}
         {d.budget && d.budget.length > 0 && (
           <section className="mt-12">
             <h2 className="flex items-center gap-2 text-xl font-semibold text-white">
@@ -184,7 +185,6 @@ function DestinationPage() {
           </section>
         )}
 
-        {/* Tips */}
         {d.tips && d.tips.length > 0 && (
           <section className="mt-12">
             <h2 className="text-xl font-semibold text-white">Tips</h2>
@@ -199,10 +199,10 @@ function DestinationPage() {
         <div className="mt-14 border-t border-white/10 pt-8 text-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-emerald-400"
+            className="inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-6 py-3 text-sm font-semibold text-white hover:bg-emerald-400"
           >
             <ArrowLeft className="h-4 w-4" />
-            Explore more destinations
+            Explore more
           </Link>
         </div>
       </div>

@@ -1,27 +1,20 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import GlobeGL from "react-globe.gl";
 
+/** Only countries we care about — clean markers */
 export const COUNTRIES = [
-  { name: "Nepal", lat: 28.39, lng: 84.12, size: 1.0, color: "#10b981", active: true },
-  { name: "India", lat: 20.59, lng: 78.96, size: 0.55, color: "#34d399", active: false },
-  { name: "Bhutan", lat: 27.51, lng: 90.43, size: 0.45, color: "#34d399", active: false },
-  { name: "Pakistan", lat: 30.37, lng: 69.34, size: 0.45, color: "#64748b", active: false },
-  { name: "Japan", lat: 36.2, lng: 138.25, size: 0.5, color: "#64748b", active: false },
-  { name: "Peru", lat: -9.19, lng: -75.01, size: 0.5, color: "#64748b", active: false },
-  { name: "Tanzania", lat: -6.36, lng: 34.88, size: 0.45, color: "#64748b", active: false },
-  { name: "New Zealand", lat: -40.9, lng: 174.88, size: 0.5, color: "#64748b", active: false },
-  { name: "Switzerland", lat: 46.81, lng: 8.22, size: 0.4, color: "#64748b", active: false },
-  { name: "Chile", lat: -35.67, lng: -71.54, size: 0.5, color: "#64748b", active: false },
-  { name: "Norway", lat: 60.47, lng: 8.46, size: 0.45, color: "#64748b", active: false },
-  { name: "Kyrgyzstan", lat: 41.2, lng: 74.76, size: 0.4, color: "#64748b", active: false },
-  { name: "China", lat: 35.86, lng: 104.19, size: 0.4, color: "#475569", active: false },
-  { name: "USA", lat: 37.09, lng: -95.71, size: 0.4, color: "#475569", active: false },
-  { name: "France", lat: 46.22, lng: 2.21, size: 0.35, color: "#475569", active: false },
-  { name: "Italy", lat: 41.87, lng: 12.56, size: 0.35, color: "#475569", active: false },
-  { name: "Iceland", lat: 64.96, lng: -19.02, size: 0.4, color: "#475569", active: false },
-  { name: "Morocco", lat: 31.79, lng: -7.09, size: 0.35, color: "#475569", active: false },
-  { name: "Argentina", lat: -38.41, lng: -63.61, size: 0.4, color: "#475569", active: false },
-  { name: "Australia", lat: -25.27, lng: 133.77, size: 0.45, color: "#475569", active: false },
+  { name: "Nepal", lat: 28.39, lng: 84.12, active: true },
+  { name: "India", lat: 22.5, lng: 79.0, active: false },
+  { name: "Bhutan", lat: 27.5, lng: 90.4, active: false },
+  { name: "Pakistan", lat: 30.4, lng: 69.3, active: false },
+  { name: "Japan", lat: 36.2, lng: 138.3, active: false },
+  { name: "Peru", lat: -9.2, lng: -75.0, active: false },
+  { name: "Tanzania", lat: -6.4, lng: 34.9, active: false },
+  { name: "New Zealand", lat: -41.0, lng: 174.0, active: false },
+  { name: "Switzerland", lat: 46.8, lng: 8.2, active: false },
+  { name: "Chile", lat: -35.7, lng: -71.5, active: false },
+  { name: "Norway", lat: 60.5, lng: 8.5, active: false },
+  { name: "Kyrgyzstan", lat: 41.2, lng: 74.8, active: false },
 ];
 
 interface GlobeProps {
@@ -30,9 +23,9 @@ interface GlobeProps {
   height?: number;
 }
 
-export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps) {
+export function Globe({ focusCountry, onCountryClick, height = 480 }: GlobeProps) {
   const globeRef = useRef<any>(null);
-  const [dimensions, setDimensions] = useState({ width: 700, height });
+  const [dimensions, setDimensions] = useState({ width: 640, height });
   const [countries, setCountries] = useState<any[]>([]);
   const [hoverD, setHoverD] = useState<any>(null);
 
@@ -47,8 +40,8 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
 
   useEffect(() => {
     const update = () => {
-      const w = Math.min(window.innerWidth - 24, 960);
-      setDimensions({ width: w, height: Math.min(height, Math.max(360, w * 0.65)) });
+      const w = Math.min(window.innerWidth - 32, 720);
+      setDimensions({ width: w, height: Math.min(height, Math.max(340, w * 0.7)) });
     };
     update();
     window.addEventListener("resize", update);
@@ -60,12 +53,12 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
     const controls = globeRef.current.controls();
     if (controls) {
       controls.autoRotate = true;
-      controls.autoRotateSpeed = 0.35;
+      controls.autoRotateSpeed = 0.3;
       controls.enableZoom = true;
-      controls.minDistance = 120;
-      controls.maxDistance = 500;
+      controls.minDistance = 140;
+      controls.maxDistance = 450;
     }
-    globeRef.current.pointOfView({ lat: 28.4, lng: 84.1, altitude: 2.0 }, 1800);
+    globeRef.current.pointOfView({ lat: 28.4, lng: 84.1, altitude: 2.15 }, 2000);
   }, []);
 
   useEffect(() => {
@@ -76,7 +69,7 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
     if (point) {
       globeRef.current.controls().autoRotate = false;
       globeRef.current.pointOfView(
-        { lat: point.lat, lng: point.lng, altitude: 1.6 },
+        { lat: point.lat, lng: point.lng, altitude: 1.55 },
         1400
       );
     }
@@ -95,13 +88,12 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
         (c) => c.name.toLowerCase() === name.toLowerCase()
       );
       onCountryClick?.(name, match?.active ?? false);
-      if (globeRef.current) {
-        const lat = polygon.properties?.LABEL_Y ?? match?.lat;
-        const lng = polygon.properties?.LABEL_X ?? match?.lng;
-        if (lat && lng) {
-          globeRef.current.controls().autoRotate = false;
-          globeRef.current.pointOfView({ lat, lng, altitude: 1.6 }, 1200);
-        }
+      if (globeRef.current && match) {
+        globeRef.current.controls().autoRotate = false;
+        globeRef.current.pointOfView(
+          { lat: match.lat, lng: match.lng, altitude: 1.55 },
+          1200
+        );
       }
     },
     [onCountryClick]
@@ -109,55 +101,80 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
 
   const getPolygonColor = (d: any) => {
     const name = (d.properties?.NAME || d.properties?.name || "").toLowerCase();
-    if (focusCountry && name === focusCountry.toLowerCase()) return "rgba(16,185,129,0.55)";
-    if (hoverD === d) return "rgba(52,211,153,0.4)";
-    if (name === "nepal") return "rgba(16,185,129,0.35)";
-    const known = COUNTRIES.find((c) => c.name.toLowerCase() === name);
-    if (known?.active) return "rgba(16,185,129,0.25)";
-    if (known) return "rgba(100,116,139,0.2)";
-    return "rgba(30,41,59,0.15)";
+    const focused = focusCountry && name === focusCountry.toLowerCase();
+    if (focused) return "rgba(16, 185, 129, 0.55)";
+    if (hoverD === d) return "rgba(52, 211, 153, 0.35)";
+    if (name === "nepal") return "rgba(16, 185, 129, 0.4)";
+    const known = COUNTRIES.some((c) => c.name.toLowerCase() === name);
+    if (known) return "rgba(71, 85, 105, 0.25)";
+    return "rgba(15, 23, 42, 0.08)";
   };
 
+  // Rings only for Nepal + focused country — cleaner look
+  const ringsData = COUNTRIES.filter(
+    (c) =>
+      c.active ||
+      (focusCountry && c.name.toLowerCase() === focusCountry.toLowerCase())
+  ).map((c) => ({
+    lat: c.lat,
+    lng: c.lng,
+    maxR: c.active ? 4 : 3,
+    propagationSpeed: 2,
+    repeatPeriod: 1400,
+  }));
+
+  const labelsData = COUNTRIES.filter(
+    (c) =>
+      c.active ||
+      (focusCountry && c.name.toLowerCase() === focusCountry.toLowerCase())
+  );
+
   return (
-    <div className="relative flex w-full items-center justify-center overflow-hidden rounded-2xl">
+    <div className="relative mx-auto flex w-full max-w-3xl items-center justify-center">
       <GlobeGL
         ref={globeRef}
         width={dimensions.width}
         height={dimensions.height}
         backgroundColor="rgba(0,0,0,0)"
-        globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+        globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
-        atmosphereColor="#10b981"
-        atmosphereAltitude={0.2}
+        atmosphereColor="#34d399"
+        atmosphereAltitude={0.15}
         polygonsData={countries}
         polygonCapColor={getPolygonColor}
-        polygonSideColor={() => "rgba(0,0,0,0.05)"}
-        polygonStrokeColor={() => "#1e293b"}
-        polygonAltitude={(d: any) =>
-          hoverD === d ||
-          (focusCountry &&
-            (d.properties?.NAME || "").toLowerCase() === focusCountry.toLowerCase())
-            ? 0.02
-            : 0.005
-        }
+        polygonSideColor={() => "rgba(0,0,0,0.12)"}
+        polygonStrokeColor={() => "rgba(148, 163, 184, 0.25)"}
+        polygonAltitude={(d: any) => {
+          const name = (d.properties?.NAME || "").toLowerCase();
+          if (name === "nepal") return 0.012;
+          if (focusCountry && name === focusCountry.toLowerCase()) return 0.014;
+          if (hoverD === d) return 0.01;
+          return 0.003;
+        }}
         onPolygonHover={setHoverD}
         onPolygonClick={handlePolygonClick}
-        polygonsTransitionDuration={300}
-        pointsData={COUNTRIES}
-        pointLat="lat"
-        pointLng="lng"
-        pointAltitude={0.015}
-        pointRadius="size"
-        pointColor="color"
-        pointLabel={(d: any) =>
-          `${d.name}${d.active ? " ✓" : " (coming soon)"}`
-        }
-        onPointClick={(d: any) => {
-          onCountryClick?.(d.name, d.active);
+        polygonsTransitionDuration={280}
+        // Soft pulse rings for Nepal / selected
+        ringsData={ringsData}
+        ringColor={() => "rgba(16, 185, 129, 0.45)"}
+        ringMaxRadius="maxR"
+        ringPropagationSpeed="propagationSpeed"
+        ringRepeatPeriod="repeatPeriod"
+        // Labels only for key countries
+        labelsData={labelsData}
+        labelLat="lat"
+        labelLng="lng"
+        labelText="name"
+        labelSize={1.4}
+        labelDotRadius={0.45}
+        labelColor={() => "#a7f3d0"}
+        labelAltitude={0.02}
+        labelResolution={2}
+        onLabelClick={(d: any) => {
+          const match = COUNTRIES.find((c) => c.name === d.name);
+          onCountryClick?.(d.name, match?.active ?? false);
         }}
-        pointsMerge={false}
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0c1a14]/70 to-transparent" />
     </div>
   );
 }

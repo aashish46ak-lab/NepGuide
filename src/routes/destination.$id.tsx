@@ -9,6 +9,7 @@ import {
   Route as RouteIcon,
 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
+import { LiveTrekMap } from "@/components/LiveTrekMap";
 import { GoogleTrekMap } from "@/components/GoogleTrekMap";
 import { getDestination } from "@/data/destinations";
 import { ROUTE_PATHS } from "@/data/routes-geo";
@@ -79,17 +80,27 @@ function DestinationPage() {
         </div>
       </div>
 
-      {/* Google Maps — trek-specific route */}
+      {/* LIVE MAP + tracking */}
       <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
         <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-white">
           <RouteIcon className="h-5 w-5 text-emerald-400" />
-          Trek route — Google Maps
+          Live map & navigation
         </h2>
         {hasMap ? (
-          <GoogleTrekMap routeId={id} height={480} />
+          <LiveTrekMap routeId={id} height={500} />
         ) : (
           <div className="flex h-[320px] items-center justify-center rounded-2xl border border-white/10 bg-[#0a1610] text-sm text-white/50">
-            Google Maps route for this destination coming soon
+            Live map for this destination coming soon
+          </div>
+        )}
+
+        {/* Google Maps alternative */}
+        {hasMap && (
+          <div className="mt-8">
+            <h3 className="mb-3 text-base font-semibold text-white/90">
+              Also open in Google Maps
+            </h3>
+            <GoogleTrekMap routeId={id} height={360} />
           </div>
         )}
       </div>
@@ -162,9 +173,6 @@ function DestinationPage() {
               <Wallet className="h-5 w-5 text-amber-400" />
               Estimated budget
             </h2>
-            <p className="mt-1 text-sm text-white/50">
-              Approximate costs in USD. Not guaranteed prices.
-            </p>
             <div className="mt-5 overflow-hidden rounded-xl border border-white/10">
               <table className="w-full text-sm">
                 <tbody>

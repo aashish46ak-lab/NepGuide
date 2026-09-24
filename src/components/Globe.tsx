@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import GlobeGL from "react-globe.gl";
 
-// Active countries with trek data + coming soon
 export const COUNTRIES = [
   { name: "Nepal", lat: 28.39, lng: 84.12, size: 1.0, color: "#10b981", active: true },
   { name: "India", lat: 20.59, lng: 78.96, size: 0.55, color: "#34d399", active: false },
@@ -37,16 +36,13 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
   const [countries, setCountries] = useState<any[]>([]);
   const [hoverD, setHoverD] = useState<any>(null);
 
-  // Load country polygons
   useEffect(() => {
     fetch("/countries-110m.geojson")
       .then((r) => r.json())
       .then((geo) => {
         if (geo?.features) setCountries(geo.features);
       })
-      .catch(() => {
-        // fallback — points only
-      });
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -133,20 +129,20 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         atmosphereColor="#10b981"
         atmosphereAltitude={0.2}
-        // Country polygons
         polygonsData={countries}
         polygonCapColor={getPolygonColor}
         polygonSideColor={() => "rgba(0,0,0,0.05)"}
         polygonStrokeColor={() => "#1e293b"}
         polygonAltitude={(d: any) =>
-          hoverD === d || (focusCountry && (d.properties?.NAME || "").toLowerCase() === focusCountry.toLowerCase())
+          hoverD === d ||
+          (focusCountry &&
+            (d.properties?.NAME || "").toLowerCase() === focusCountry.toLowerCase())
             ? 0.02
             : 0.005
         }
         onPolygonHover={setHoverD}
         onPolygonClick={handlePolygonClick}
         polygonsTransitionDuration={300}
-        // Points for known countries
         pointsData={COUNTRIES}
         pointLat="lat"
         pointLng="lng"
@@ -161,18 +157,7 @@ export function Globe({ focusCountry, onCountryClick, height = 520 }: GlobeProps
         }}
         pointsMerge={false}
       />
-
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0c1a14]/70 to-transparent" />
-
-      {/* Legend */}
-      <div className="absolute bottom-4 left-4 flex flex-wrap gap-3 text-xs text-white/70">
-        <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" /> Active
-        </span>
-        <span className="flex items-center gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-slate-400" /> Coming soon
-        </span>
-      </div>
     </div>
   );
 }

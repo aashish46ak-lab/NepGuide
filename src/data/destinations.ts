@@ -1,15 +1,38 @@
+export type RouteStop = {
+  day: number;
+  name: string;
+  elev?: string;
+  note?: string;
+};
+
+export type BudgetItem = {
+  category: string;
+  amount: string;
+};
+
 export type Destination = {
   id: string;
   name: string;
   region: string;
   type: "trek" | "city" | "wildlife" | "lake" | "viewpoint" | "heritage" | "pilgrimage";
   short: string;
+  description?: string;
   duration: string;
   difficulty: string;
   cost: string;
+  costMin?: number;
+  costMax?: number;
   image: string;
   season: string;
+  start?: string;
+  end?: string;
+  distance?: string;
+  maxElev?: string;
+  permits?: string;
   featured?: boolean;
+  stops?: RouteStop[];
+  budget?: BudgetItem[];
+  tips?: string[];
 };
 
 export const NEPAL_DESTINATIONS: Destination[] = [
@@ -19,12 +42,49 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     region: "Everest Region",
     type: "trek",
     short: "Classic walk to the foot of the world's highest mountain through Sherpa villages and glaciers.",
+    description:
+      "Nepal's signature trek. A mountain flight to Lukla drops you into the Dudh Koshi valley; the trail climbs through Sherpa villages, pine forest and glacial moraine to Everest Base Camp at 5,364 m. Sunrise from Kala Patthar is the highlight.",
     duration: "12–14 days",
     difficulty: "Challenging",
     cost: "$1,100–2,200",
+    costMin: 1100,
+    costMax: 2200,
     image: "/images/everest.jpg",
     season: "Spring / Autumn",
+    start: "Kathmandu → Lukla",
+    end: "Everest Base Camp / Kala Patthar",
+    distance: "~130 km",
+    maxElev: "5,545 m (Kala Patthar)",
+    permits: "Sagarmatha NP + Khumbu rural municipality",
     featured: true,
+    stops: [
+      { day: 1, name: "Lukla → Phakding", elev: "2,610 m", note: "Easy first day" },
+      { day: 2, name: "Phakding → Namche Bazaar", elev: "3,440 m" },
+      { day: 3, name: "Namche acclimatisation", elev: "3,440 m", note: "Rest / short hikes" },
+      { day: 4, name: "Namche → Tengboche", elev: "3,867 m" },
+      { day: 5, name: "Tengboche → Dingboche", elev: "4,410 m" },
+      { day: 6, name: "Dingboche acclimatisation", elev: "4,410 m" },
+      { day: 7, name: "Dingboche → Lobuche", elev: "4,910 m" },
+      { day: 8, name: "Lobuche → Gorak Shep → EBC", elev: "5,364 m" },
+      { day: 9, name: "Kala Patthar → Pheriche", elev: "5,545 m" },
+      { day: 10, name: "Descent toward Namche" },
+      { day: 11, name: "Namche → Lukla" },
+      { day: 12, name: "Fly Lukla → Kathmandu" },
+    ],
+    budget: [
+      { category: "Flights (KTM–Lukla RT)", amount: "$250–450" },
+      { category: "Teahouse lodging", amount: "$150–300" },
+      { category: "Food (3 meals/day)", amount: "$200–350" },
+      { category: "Permits", amount: "$50–80" },
+      { category: "Guide (optional)", amount: "$250–400" },
+      { category: "Porter (optional)", amount: "$150–250" },
+      { category: "Misc (WiFi, showers, snacks)", amount: "$50–100" },
+    ],
+    tips: [
+      "Two acclimatisation days are standard.",
+      "Ascend no more than 400–500 m sleeping altitude per day above 3,000 m.",
+      "Peak season flights often go via Ramechhap.",
+    ],
   },
   {
     id: "abc",
@@ -32,12 +92,39 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     region: "Annapurna Region",
     type: "trek",
     short: "Into the Annapurna Sanctuary — a glacial amphitheatre ringed by 7,000 m peaks.",
+    description:
+      "From Pokhara the trail climbs through Gurung villages and rhododendron forest into a hidden glacial basin at 4,130 m, encircled by Annapurna I, Hiunchuli and Machhapuchhre.",
     duration: "7–11 days",
     difficulty: "Moderate",
     cost: "$600–1,200",
+    costMin: 600,
+    costMax: 1200,
     image: "/images/annapurna.jpg",
     season: "Spring / Autumn",
+    start: "Pokhara → Nayapul",
+    end: "Annapurna Base Camp",
+    distance: "~110 km",
+    maxElev: "4,130 m",
+    permits: "ACAP + TIMS",
     featured: true,
+    stops: [
+      { day: 1, name: "Pokhara → Nayapul → Jhinu / Chhomrong", elev: "2,170 m" },
+      { day: 2, name: "Chhomrong → Bamboo / Dovan", elev: "2,600 m" },
+      { day: 3, name: "Dovan → Deurali", elev: "3,230 m" },
+      { day: 4, name: "Deurali → Annapurna Base Camp", elev: "4,130 m" },
+      { day: 5, name: "Sunrise at ABC → descend" },
+      { day: 6, name: "Return toward Chhomrong / Nayapul" },
+      { day: 7, name: "Back to Pokhara" },
+    ],
+    budget: [
+      { category: "Transport (Pokhara–trailhead)", amount: "$30–60" },
+      { category: "Lodging", amount: "$80–160" },
+      { category: "Food", amount: "$120–200" },
+      { category: "Permits", amount: "$40–50" },
+      { category: "Guide (optional)", amount: "$180–280" },
+      { category: "Porter (optional)", amount: "$120–180" },
+    ],
+    tips: ["Avalanche risk in sanctuary after heavy snow — check conditions in winter."],
   },
   {
     id: "annapurna-circuit",
@@ -45,12 +132,38 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     region: "Annapurna Region",
     type: "trek",
     short: "Around the Annapurna massif over Thorong La, from rice paddies to Tibetan desert.",
+    description:
+      "Classic long-distance trek circling the Annapurna range: Marsyangdi valley to Manang, Thorong La (5,416 m), then Muktinath and the Kali Gandaki. Road access lets you shorten either end.",
     duration: "12–16 days",
     difficulty: "Challenging",
     cost: "$900–1,800",
+    costMin: 900,
+    costMax: 1800,
     image: "/images/annapurna.jpg",
     season: "Spring / Autumn",
+    start: "Besisahar",
+    end: "Jomsom / Pokhara",
+    distance: "~160 km",
+    maxElev: "5,416 m (Thorong La)",
+    permits: "ACAP + TIMS",
     featured: true,
+    stops: [
+      { day: 1, name: "Besisahar → Ngadi / Jagat" },
+      { day: 3, name: "Chame", elev: "2,670 m" },
+      { day: 4, name: "Upper Pisang", elev: "3,300 m" },
+      { day: 5, name: "Manang", elev: "3,540 m", note: "Acclimatisation" },
+      { day: 7, name: "Thorong Phedi", elev: "4,450 m" },
+      { day: 8, name: "Thorong La → Muktinath", elev: "5,416 m" },
+      { day: 9, name: "Jomsom", elev: "2,743 m" },
+    ],
+    budget: [
+      { category: "Transport", amount: "$40–100" },
+      { category: "Lodging", amount: "$120–250" },
+      { category: "Food", amount: "$180–300" },
+      { category: "Permits", amount: "$40–50" },
+      { category: "Guide", amount: "$280–400" },
+    ],
+    tips: ["Manang rest day is essential before Thorong La.", "Cross the pass early morning."],
   },
   {
     id: "mardi",
@@ -58,12 +171,30 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     region: "Annapurna Region",
     type: "trek",
     short: "Short ridge trek with close-up Machhapuchhre views. Perfect for a week.",
+    description: "High ridge route above the Modi Khola: Forest Camp, Low Camp, High Camp to a viewpoint at ~4,500 m below the fishtail summit.",
     duration: "5–7 days",
     difficulty: "Moderate",
     cost: "$350–700",
     image: "/images/annapurna.jpg",
     season: "Spring / Autumn",
+    start: "Pokhara → Kande",
+    end: "Mardi Himal viewpoint",
+    distance: "~45 km",
+    maxElev: "4,500 m",
+    permits: "ACAP + TIMS",
     featured: true,
+    stops: [
+      { day: 1, name: "Kande → Forest Camp", elev: "2,520 m" },
+      { day: 2, name: "Forest Camp → Low Camp", elev: "3,050 m" },
+      { day: 3, name: "Low Camp → High Camp", elev: "3,580 m" },
+      { day: 4, name: "Viewpoint → descend", elev: "4,500 m" },
+    ],
+    budget: [
+      { category: "Transport", amount: "$20–40" },
+      { category: "Lodging + food", amount: "$200–400" },
+      { category: "Permits", amount: "$40–50" },
+      { category: "Guide (optional)", amount: "$100–200" },
+    ],
   },
   {
     id: "poon-hill",
@@ -71,12 +202,29 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     region: "Annapurna Region",
     type: "viewpoint",
     short: "Best short sunrise trek in Nepal through Magar villages and rhododendron forest.",
+    description: "Stone staircases to Ghorepani, then pre-dawn walk to Poon Hill (3,210 m) for sunrise over Dhaulagiri and Annapurna South.",
     duration: "4–5 days",
     difficulty: "Easy",
     cost: "$250–500",
     image: "/images/annapurna.jpg",
     season: "Year-round",
+    start: "Pokhara → Nayapul",
+    end: "Poon Hill / Ghandruk",
+    distance: "~40 km",
+    maxElev: "3,210 m",
+    permits: "ACAP + TIMS",
     featured: true,
+    stops: [
+      { day: 1, name: "Nayapul → Tikhedhunga / Ulleri" },
+      { day: 2, name: "Ghorepani", elev: "2,860 m" },
+      { day: 3, name: "Poon Hill sunrise → Tadapani / Ghandruk", elev: "3,210 m" },
+      { day: 4, name: "Return to Pokhara" },
+    ],
+    budget: [
+      { category: "Transport", amount: "$20–40" },
+      { category: "Lodging + food", amount: "$150–300" },
+      { category: "Permits", amount: "$40–50" },
+    ],
   },
   {
     id: "langtang",
@@ -84,12 +232,34 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     region: "Langtang Region",
     type: "trek",
     short: "Glacier-headed valley a day's drive from Kathmandu, rebuilt after 2015.",
+    description: "Langtang Khola climbs from forest into yak pastures below Langtang Lirung. Kyanjin Gompa is base for Tserko Ri and the cheese factory.",
     duration: "7–9 days",
     difficulty: "Moderate",
     cost: "$450–900",
     image: "/images/langtang.jpg",
     season: "Spring / Autumn",
+    start: "Syabrubesi",
+    end: "Kyanjin Gompa",
+    distance: "~65 km",
+    maxElev: "4,984 m (Tserko Ri)",
+    permits: "Langtang NP + TIMS",
     featured: true,
+    stops: [
+      { day: 1, name: "Kathmandu → Syabrubesi" },
+      { day: 2, name: "Syabrubesi → Lama Hotel", elev: "2,480 m" },
+      { day: 3, name: "Lama Hotel → Langtang village", elev: "3,430 m" },
+      { day: 4, name: "Kyanjin Gompa", elev: "3,860 m" },
+      { day: 5, name: "Tserko Ri day hike", elev: "4,984 m" },
+      { day: 6, name: "Descent begins" },
+      { day: 7, name: "Back to Syabrubesi" },
+    ],
+    budget: [
+      { category: "Transport", amount: "$20–40" },
+      { category: "Lodging", amount: "$70–140" },
+      { category: "Food", amount: "$100–180" },
+      { category: "Permits", amount: "$40–50" },
+      { category: "Guide (optional)", amount: "$180–280" },
+    ],
   },
   {
     id: "gosaikunda",
@@ -102,6 +272,19 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     cost: "$400–800",
     image: "/images/langtang.jpg",
     season: "Spring / Autumn",
+    start: "Dhunche",
+    end: "Gosaikunda",
+    maxElev: "4,380 m",
+    permits: "Langtang NP + TIMS",
+    stops: [
+      { day: 1, name: "Dhunche → Sing Gompa" },
+      { day: 2, name: "Lauribina → Gosaikunda", elev: "4,380 m" },
+      { day: 3, name: "Explore lakes / return" },
+    ],
+    budget: [
+      { category: "Transport + lodging + food", amount: "$300–600" },
+      { category: "Permits", amount: "$40–50" },
+    ],
   },
   {
     id: "manaslu",
@@ -114,7 +297,23 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     cost: "$1,200–2,200",
     image: "/images/annapurna.jpg",
     season: "Spring / Autumn",
+    start: "Soti Khola / Machha Khola",
+    end: "Dharapani",
+    distance: "~177 km",
+    maxElev: "5,106 m (Larke La)",
+    permits: "Restricted + MCAP + ACAP (guide required)",
     featured: true,
+    stops: [
+      { day: 1, name: "Machha Khola → Jagat" },
+      { day: 5, name: "Samagaun", elev: "3,530 m", note: "Acclimatisation" },
+      { day: 8, name: "Larke La → Bimthang", elev: "5,106 m" },
+      { day: 10, name: "Dharapani" },
+    ],
+    budget: [
+      { category: "Transport", amount: "$50–100" },
+      { category: "Lodging + food", amount: "$400–700" },
+      { category: "Permits + guide (required)", amount: "$500–900" },
+    ],
   },
   {
     id: "upper-mustang",
@@ -127,7 +326,23 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     cost: "$1,800–3,000",
     image: "/images/mustang.jpg",
     season: "Mar–Nov",
+    start: "Jomsom",
+    end: "Lo Manthang",
+    distance: "~115 km",
+    maxElev: "4,230 m",
+    permits: "Upper Mustang RAP (USD 500/10 days) + ACAP",
     featured: true,
+    stops: [
+      { day: 1, name: "Jomsom → Kagbeni" },
+      { day: 3, name: "Chele → Syangboche" },
+      { day: 5, name: "Lo Manthang", elev: "3,840 m" },
+      { day: 7, name: "Explore / return south" },
+    ],
+    budget: [
+      { category: "Restricted permit", amount: "$500" },
+      { category: "Flights / transport", amount: "$150–300" },
+      { category: "Lodging + food + guide", amount: "$800–1,500" },
+    ],
   },
   {
     id: "gokyo",
@@ -140,6 +355,20 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     cost: "$1,000–2,000",
     image: "/images/everest.jpg",
     season: "Spring / Autumn",
+    start: "Lukla",
+    end: "Gokyo Ri",
+    maxElev: "5,357 m",
+    permits: "Sagarmatha NP + local permit",
+    stops: [
+      { day: 1, name: "Lukla → Phakding / Namche" },
+      { day: 4, name: "Dole → Machhermo" },
+      { day: 5, name: "Gokyo", elev: "4,790 m" },
+      { day: 6, name: "Gokyo Ri", elev: "5,357 m" },
+    ],
+    budget: [
+      { category: "Flights + lodging + food", amount: "$700–1,400" },
+      { category: "Permits + guide", amount: "$300–600" },
+    ],
   },
   {
     id: "pokhara",
@@ -153,6 +382,12 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     image: "/images/pokhara.jpg",
     season: "Year-round",
     featured: true,
+    budget: [
+      { category: "Hotel / guesthouse", amount: "$20–60/night" },
+      { category: "Food", amount: "$10–25/day" },
+      { category: "Activities (boat, paraglide)", amount: "$20–120" },
+    ],
+    tips: ["Sarangkot for sunrise.", "Gateway to ABC, Poon Hill, Mardi Himal."],
   },
   {
     id: "kathmandu",
@@ -166,6 +401,10 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     image: "/images/kathmandu.jpg",
     season: "Year-round",
     featured: true,
+    budget: [
+      { category: "Hotel", amount: "$15–50/night" },
+      { category: "Food + sites", amount: "$20–40/day" },
+    ],
   },
   {
     id: "chitwan",
@@ -179,6 +418,10 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     image: "/images/terai.jpg",
     season: "Oct–Mar",
     featured: true,
+    budget: [
+      { category: "Lodge + meals", amount: "$50–120/night" },
+      { category: "Safari activities", amount: "$30–80" },
+    ],
   },
   {
     id: "lumbini",
@@ -203,6 +446,7 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     cost: "$600–1,200",
     image: "/images/pokhara.jpg",
     season: "Spring / Autumn",
+    permits: "Rara NP + TIMS",
   },
   {
     id: "shey-phoksundo",
@@ -265,6 +509,10 @@ export const NEPAL_DESTINATIONS: Destination[] = [
     season: "Year-round",
   },
 ];
+
+export function getDestination(id: string) {
+  return NEPAL_DESTINATIONS.find((d) => d.id === id);
+}
 
 export const SEARCH_ITEMS = [
   ...NEPAL_DESTINATIONS.map((d) => ({

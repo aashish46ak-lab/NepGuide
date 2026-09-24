@@ -11,7 +11,7 @@ import {
 import { Navbar } from "@/components/Navbar";
 import { NepalMap } from "@/components/NepalMap";
 import { getDestination } from "@/data/destinations";
-import { ROUTE_COORDS } from "@/data/routes-geo";
+import { ROUTE_PATHS } from "@/data/routes-geo";
 
 export const Route = createFileRoute("/destination/$id")({
   component: DestinationPage,
@@ -20,7 +20,7 @@ export const Route = createFileRoute("/destination/$id")({
 function DestinationPage() {
   const { id } = Route.useParams();
   const d = getDestination(id);
-  const hasMap = Boolean(ROUTE_COORDS[id]);
+  const hasMap = Boolean(ROUTE_PATHS[id]);
 
   if (!d) {
     return (
@@ -40,58 +40,62 @@ function DestinationPage() {
     <div className="min-h-screen bg-[#0c1a14]">
       <Navbar />
 
-      <div className="relative h-[40vh] min-h-[260px] w-full">
-        <img src={d.image} alt={d.name} className="h-full w-full object-cover" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0c1a14] via-[#0c1a14]/55 to-black/25" />
-        <div className="absolute bottom-0 left-0 right-0 px-4 pb-8 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-4xl">
-            <Link
-              to="/"
-              className="mb-3 inline-flex items-center gap-2 text-sm text-white/70 hover:text-white"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Back
-            </Link>
-            <p className="flex items-center gap-1 text-sm text-emerald-300">
-              <MapPin className="h-3.5 w-3.5" />
-              {d.region}
-            </p>
-            <h1 className="mt-1 text-3xl font-bold text-white sm:text-4xl md:text-5xl">
-              {d.name}
-            </h1>
+      {/* Compact header */}
+      <div className="border-b border-white/10 bg-[#0a1610] pt-16">
+        <div className="mx-auto max-w-6xl px-4 py-5 sm:px-6 lg:px-8">
+          <Link
+            to="/"
+            className="mb-3 inline-flex items-center gap-2 text-sm text-white/60 hover:text-white"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </Link>
+          <p className="flex items-center gap-1 text-sm text-emerald-300">
+            <MapPin className="h-3.5 w-3.5" />
+            {d.region}
+          </p>
+          <h1 className="mt-1 text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+            {d.name}
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-white/60">{d.short}</p>
+
+          <div className="mt-4 flex flex-wrap gap-4 text-sm text-white/70">
+            <span className="flex items-center gap-1.5">
+              <Clock className="h-4 w-4 text-emerald-400" />
+              {d.duration}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <TrendingUp className="h-4 w-4 text-teal-400" />
+              {d.difficulty}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Wallet className="h-4 w-4 text-amber-400" />
+              {d.cost}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Mountain className="h-4 w-4 text-sky-400" />
+              {d.season}
+            </span>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[
-            { icon: Clock, label: "Duration", value: d.duration },
-            { icon: TrendingUp, label: "Difficulty", value: d.difficulty },
-            { icon: Wallet, label: "Budget", value: d.cost },
-            { icon: Mountain, label: "Season", value: d.season },
-          ].map((s) => (
-            <div
-              key={s.label}
-              className="rounded-xl border border-white/10 bg-white/5 p-4"
-            >
-              <s.icon className="mb-2 h-4 w-4 text-emerald-400" />
-              <p className="text-[11px] uppercase tracking-wide text-white/45">
-                {s.label}
-              </p>
-              <p className="mt-0.5 text-sm font-semibold text-white">{s.value}</p>
-            </div>
-          ))}
-        </div>
-
-        {hasMap && (
-          <section className="mt-10">
-            <h2 className="mb-4 text-xl font-semibold text-white">Route on map</h2>
-            <NepalMap routeId={id} height={360} />
-          </section>
+      {/* REAL MAP — primary focus when trek is opened */}
+      <div className="mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8">
+        <h2 className="mb-3 flex items-center gap-2 text-lg font-semibold text-white">
+          <RouteIcon className="h-5 w-5 text-emerald-400" />
+          Trek route on map
+        </h2>
+        <NepalMap routeId={hasMap ? id : null} height={520} autoFocus />
+        {!hasMap && (
+          <p className="mt-3 text-center text-sm text-white/50">
+            Detailed path for this destination will be added soon. See itinerary below.
+          </p>
         )}
+      </div>
 
-        <section className="mt-10">
+      <div className="mx-auto max-w-4xl px-4 pb-14 sm:px-6 lg:px-8">
+        <section className="mt-4">
           <h2 className="text-xl font-semibold text-white">Overview</h2>
           <p className="mt-3 leading-relaxed text-white/70">
             {d.description || d.short}

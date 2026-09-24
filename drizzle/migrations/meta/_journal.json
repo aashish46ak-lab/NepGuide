@@ -15,6 +15,13 @@
       "when": 1790231099008,
       "tag": "0001_nepguide_seed_nepal",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790231229144,
+      "tag": "0002_nepguide_seed_routes",
+      "breakpoints": true
     }
   ]
 }

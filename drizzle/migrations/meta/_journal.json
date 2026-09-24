@@ -1,5 +1,13 @@
 {
   "version": "7",
   "dialect": "postgresql",
-  "entries": []
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790231050664,
+      "tag": "0000_nepguide_core_schema",
+      "breakpoints": true
+    }
+  ]
 }

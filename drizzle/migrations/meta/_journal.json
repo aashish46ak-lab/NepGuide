@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1790231050664,
+      "tag": "0000_nepguide_core_schema",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790231099008,
+      "tag": "0001_nepguide_seed_nepal",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790231229144,
+      "tag": "0002_nepguide_seed_routes",
+      "breakpoints": true
+    }
+  ]
+}
